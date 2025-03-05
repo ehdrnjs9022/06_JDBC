@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.kh.mvc.model.dto.UserDTO;
+import com.kh.mvc.util.JdbcUtil;
 
 /**
  * DAO(Data Access Object)
@@ -155,13 +156,8 @@ public class UserDAO {
 						System.out.println("DB서버 이상함");
 				}
 			
-				try {
-					if(pstmt != null) {
-							pstmt.close();
-					}
-				} catch (SQLException e) {
-						System.out.println("DB서버 이상함");
-				}
+				JdbcUtil.close(pstmt);
+				
 			
 				try {
 					if(conn != null) {

@@ -1,9 +1,9 @@
 package com.kh.mvc.util;
 
-import java.beans.Statement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class JdbcUtil {
 	
@@ -35,12 +35,14 @@ public class JdbcUtil {
 				return conn;
 			
 		}
-		public static void  close(Statement stmt) {
+		public static void close(Statement stmt) {
+
 			try {
-					if(stmt != null)
-							stmt.close();
-			}catch (SQLException e) {
-				System.out.println("PreparedStatement 이상해요");
+				if(stmt != null) {
+						stmt.close();
+				}
+			} catch (SQLException e) {
+					System.out.println("DB서버 이상함");
 			}
 		}
 		
