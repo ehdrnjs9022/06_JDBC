@@ -1,7 +1,0 @@
-stmt = conn.createStatement();
-conn 객체
-. -> conn객체안의 createStatement(); 메서드를 실행하는역할
-. (점)-> conn 안에 들어간다 / 값 반환 or 객체생성 -> 명령어마다 달라짐! 
-
-메서드실행시 conn 객체안에 Statement 객체생성한것을
-stmt 변수에 객체를 저장

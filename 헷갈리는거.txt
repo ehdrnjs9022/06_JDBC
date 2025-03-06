@@ -1,0 +1,15 @@
+1.prepareStatement(sql) 는 conn객체가 가지고있는 기능(함수) = 이걸 메서드라부른다
+
+. 은 호출한다의미
+conn 객체에 있는 기능을 호출한다prepareStatement() 
+소괄호에 sql 넣으면 sql을 담아서 호출한다 그것을 
+
+변수에 저장한다 pstmt = conn.prepareStatement(sql)
+
+2. if(pstmt !=null) pstmt.close(); 
+null이 아닐때 왜닫는지
+
+null이 아니다 (= conn이 실제로 연결된 상태라면)  
+clsoe()를 호출해서 데이터베이스와의 연결을 끊겠다
+
+3.호출해 -> 메서드실행 -> 글로넘어가

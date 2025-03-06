@@ -18,3 +18,10 @@
 
 7. 사용 완료된 JDBC 객체 자원 반환 
 
+DriverManager.getConnection()으로 DB에 연결하고 Statement 혹은 PreparedStatement로 SQL문을 실행해 ResultSet을 획득한다.
+
+while(rs.next()) 반복문 내에서 각 행의 데이터를 rs.getXXX("컬럼명") 또는 rs.getXXX(인덱스) 방식으로 추출한다.
+
+추출된 데이터는 VO 객체(ProductVO, UserVO 등)에 set 메서드로 할당한 후, 리스트에 추가되어 반환된다.
+
+이를 통해 데이터베이스로부터 조회한 결과를 자바 애플리케이션 내에서 객체 단위로 관리할 수 있게 된다.

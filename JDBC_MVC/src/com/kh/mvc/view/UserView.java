@@ -1,5 +1,6 @@
 package com.kh.mvc.view;
 
+import java.sql.ResultSet;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -32,6 +33,11 @@ public class UserView {
 				System.out.println("--- USER테이블 관리 프로그램 ---");
 				System.out.println("1. 회원 전체 조회");
 				System.out.println("2. 회원 추가");
+				System.out.println("3. 회원 삭제");
+				System.out.println("4. 비밀번호 변경");
+				System.out.println("5. 회원 번호를 가지고 단일회원 조회");
+				System.out.println("6. 회원 아이디 검색으로 조회");
+				
 				System.out.println("9. 프로그램 종료");
 				System.out.print("이용할 메뉴를 선택해주세요 > ");
 				int menuNo = 0;
@@ -47,6 +53,10 @@ public class UserView {
 				switch(menuNo) {
 				case 1 : 	findAll(); break;
 				case 2 :  insertUser(); break;
+				case 3 :  deleteId(); break;
+				case 4 :  updatePw(); break;
+				case 5 :  findNo(); break;
+				
 				case 9 : 	System.out.println("프로그램 종료 "); return;
 				default : System.out.println("잘못된 메뉴 선택입니다.");
 				}
@@ -120,6 +130,77 @@ public class UserView {
 			}
 		
 		} 
+		/**
+		 * 회원삭제
+		 */
+		public void deleteId() {
+			
+				System.out.println("--- 회원 삭제 ---");
+				System.out.print("\n 삭제 할 아이디 입력  > ");
+				String userId = sc.next();
+				System.out.print("비밀번호 입력 >");
+				String userPw =sc.next();
+				sc.nextLine();
+
+				int result = userController.deleteId(userId,userPw);
+				
+				if(result == 0) {
+					System.out.println("아이디 또는 비밀번호가 일치하지 않습니다.");
+				} else {
+					System.out.println("정말로 삭제 하시겠습니까? (Y/N) ");
+				}		String check = sc.next().toUpperCase();
+							if(check.equals("Y")) {
+								System.out.println("\n회원이 삭제 되었습니다.");
+							} else {
+								System.out.println("\n삭제 취소");
+							}
+				
+		}
+		
+		/**
+		 * 비밀번호 수정
+		 */
+		
+		public void updatePw() {
+			
+			System.out.println("\n--- 비밀번호 수정 ---");
+			System.out.print("아이디 입력 > ");
+			String id = sc.next();
+			System.out.print("비밀번호 입력 >");
+			String pw = sc.next();
+			
+			System.out.print("변경 할 비밀번호 입력 > ");
+			String newPw = sc.next();
+			sc.nextLine();
+			
+			int result =userController.updatePw(id,pw,newPw);
+			
+			if(result > 0) {
+				System.out.println("\n변경이 완료 되었습니다.");
+			} else {
+				System.out.println("\n변경 실패! 아이디 또는 비밀번호를 확인하세요.");
+			}
+			
+		}
+		/*
+		 * 넘버로 단일회원조회 ---------------다시하기
+		 */
+		public void findNo() {
+			
+			System.out.println("--- 회원 아이디 검색으로 조회 ---");
+			System.out.print("회원 번호 입력 >");
+			String id = sc.next();
+			sc.nextLine();
+			
+			UserDTO search =userController.findNo(id);
+			
+			if(search == null) {
+					System.out.println("\n존재하지 않는 번호 입니다.");
+			} else {
+					System.out.println("\n조회한 회원 아이디" + search.getUserId());
+			}
+			
+		}
 		
 		
 		

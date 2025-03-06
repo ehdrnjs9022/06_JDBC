@@ -1,5 +1,6 @@
 package com.kh.mvc.controller;
 
+import java.sql.ResultSet;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +28,7 @@ public class UserController {
 				// List<UserDTO> = userDao.findAll();
 			
 		}
-
+		
 		public int insertUser(String userId, String userPw, String userName) {
 				// 여기3가지는 변수
 			
@@ -39,5 +40,50 @@ public class UserController {
 			return userDao.insertUser(user); // DAO에게 값을 넘겨주는 구문
 		}
 
+		/*
+		 * 회원 삭제
+		 */
+		public int deleteId(String userId,String userPw) {
+				
+			UserDTO del = new UserDTO();
+			del.setUserId(userId);
+			del.setUserPw(userPw);
+			
+			return userDao.deleteId(del);
+			
+		}
 
+		/*
+		 * 비밀번호 변경
+		 */
+		
+			public int updatePw(String id, String pw, String newPw) {
+				
+				UserDTO user = new UserDTO();
+				
+				user.setUserId(id);
+				user.setUserPw(pw);
+				
+				return userDao.updatePw(id,pw,newPw); // id,pw,newPw 다오에게 보낼때만 사용
+			}
+			
+		/*
+		 * 회원 넘버로 검색으로 조회	
+		 */
+			
+			public UserDTO findNo(String id) {
+				
+				UserDTO search =new UserDTO();
+				
+				search.setUserId(id);
+				
+				return userDao.findNo(search);
+				
+			}
+		
+		
+		
+		
+		
+		
 }

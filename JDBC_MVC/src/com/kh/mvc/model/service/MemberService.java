@@ -28,10 +28,9 @@ public class MemberService {
 		List<UserDTO> list = userDao.findAll(conn);
 			
 			
-			
-			
 			return list;
 		}
+	
 	
 	
 }

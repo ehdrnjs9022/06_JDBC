@@ -62,6 +62,9 @@ public class UserDAO {
 	 * 								DML    > 처리된 행의 개수
 	 * 
 	 * 
+	 *  Statement는 바로 생성할 수 있지만, 
+	 *  PreparedStatement는 SQL과 함께 conn.prepareStatement(sql)로 만들어야 하기 때문! 
+	 *  (순서가달라진다)
 	 */
 	
 		// final 변수는 대문자로
@@ -180,58 +183,191 @@ public class UserDAO {
 		
 		public int insertUser(UserDTO user) {
 			
+			Connection conn = null;
+			PreparedStatement pstmt = null;
+		
+			String sql = "INSERT "
+									+ "INTO "
+													+ "TB_USER "
+									+ "VALUES "
+													+ "("
+													+ "SEQ_USER_NO.NEXTVAL"
+											+ ", ?"
+											+ ", ?"
+											+ ", ?"
+											+ ", SYSDATE"
+												+ ")";
+		int result = 0;
+		try {
+			conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+			
+			/*
+			 * conn =
+			 *    DriverManager.getConnection("jdbc:oracle:thin:@112.221.156.34:12345:XE",
+			 * "KH25_JDK", "KH1234");
+			 */
+				//conn.setAutoCommit(false);
+				pstmt = conn.prepareStatement(sql);
+				
+				
+				pstmt.setString(1, user.getUserId());
+				pstmt.setString(2, user.getUserPw());
+				pstmt.setString(3, user.getUserName());
+				
+				result = pstmt.executeUpdate();
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	finally {
+		} try {
+				if(pstmt != null && !pstmt.isClosed()) pstmt.close();
+		} catch (SQLException e) {
+				e.printStackTrace();
+		}
+		 try {
+			 	if(conn !=null) conn.close();
+		 }catch (Exception e) {
+			 e.printStackTrace();
+		 }
+			return result;
+			}
+		
+		/*
+		 * 회원 삭제
+		 */
+		
+			public int deleteId(UserDTO del) {
+				
 				Connection conn = null;
 				PreparedStatement pstmt = null;
-			
-				String sql = "INSERT "
-										+ "INTO "
-														+ "TB_USER "
-										+ "VALUES "
-														+ "("
-														+ "SEQ_USER_NO.NEXTVAL"
-												+ ", ?"
-												+ ", ?"
-												+ ", ?"
-												+ ", SYSDATE"
-													+ ")";
-			int result = 0;
-			try {
-				conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 				
-				/*
-				 * conn =
-				 *    DriverManager.getConnection("jdbc:oracle:thin:@112.221.156.34:12345:XE",
-				 * "KH25_JDK", "KH1234");
-				 */
-					//conn.setAutoCommit(false);
-					pstmt = conn.prepareStatement(sql);
+				String sql = """
+						DELETE  
+						FROM TB_USER
+						WHERE
+					  USER_ID = ?
+						and
+						USER_PW = ?
+						""";
+				int result = 0;
+				try {
 					
-					
-					pstmt.setString(1, user.getUserId());
-					pstmt.setString(2, user.getUserPw());
-					pstmt.setString(3, user.getUserName());
-					
-					result = pstmt.executeUpdate();
+				conn = DriverManager.getConnection(URL,USERNAME,PASSWORD);
+				
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, del.getUserId());
+				pstmt.setString(2, del.getUserPw());
+				
+				result = pstmt.executeUpdate();
 			
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}	finally {
-			} try {
-					if(pstmt != null && !pstmt.isClosed()) pstmt.close();
-			} catch (SQLException e) {
+				}catch (SQLException e) {
 					e.printStackTrace();
-			}
-			 try {
-				 	if(conn !=null) conn.close();
-			 }catch (Exception e) {
-				 e.printStackTrace();
-			 }
+				} finally {
+					try {
+						if(pstmt != null) pstmt.close();
+						if(conn != null) conn.close();
+					}catch (Exception e) {
+						e.printStackTrace();
+					}
+				} 
 				return result;
 			}
 		
-		
-	
-	
+			/*
+			 * 비밀번호 변경
+			 */
+			
+			public int updatePw(String id,String pw ,String newPw) {
+				
+				Connection conn = null;
+				PreparedStatement pstmt = null;
+				
+				String sql = """
+						UPDATE TB_USER SET
+						USER_PW =?
+						WHERE 
+						USER_ID =?
+						AND
+						USER_PW =?			
+						""";
+			int result = 0;
+			
+			try {
+				conn = DriverManager.getConnection(URL,USERNAME,PASSWORD);
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, newPw);
+				pstmt.setString(2, id);
+				pstmt.setString(3, pw);
+				
+				result = pstmt.executeUpdate();
+				
+			
+			}catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				
+			} try {
+				if(pstmt !=null) pstmt.close(); 
+				if(conn !=null) conn.close();
+			}catch (Exception e) {
+
+			}
+			
+			return result; // 리턴값을 컨트롤러가 updatePw 메소드명으로 호출함
+				
+			}
+			
+			/*
+			 * 번호단일조회 -- 번호를 눌렀을때 번호가 있다면 이름을 조회
+			 */
+			public UserDTO findNo(UserDTO search) {
+				
+				Connection conn = null;
+ 				PreparedStatement pstmt =null;
+ 				ResultSet rset = null;
+ 				
+ 				String sql = """
+ 						SELECT USER_ID
+ 						FROM TB_USER
+ 						WHERE USER_ID = ?
+ 						""";
+ 				
+				try {
+					conn = DriverManager.getConnection(URL,USERNAME,PASSWORD);
+					pstmt = conn.prepareStatement(sql);
+					
+					pstmt.setString(1, search.getUserId());
+					
+				 rset = pstmt.executeQuery();
+					
+					if(rset.next()) {
+						int no = rset.getInt("USER_NO");
+					} else {
+						search = null;
+					}
+						
+				}catch (SQLException e) {
+					e.printStackTrace();
+				} finally {
+					
+				}try {
+					if(rset !=null) rset.close();
+					if(pstmt !=null) pstmt.close();
+					if(conn !=null) conn.close();
+				}catch (Exception e) {
+
+				}
+				
+				return search; 
+				
+				
+			}
+			
+			
+			
+			
+			
+			
 }
 
 
