@@ -30,6 +30,7 @@ public class UserView {
 		public void mainMenu() {
 			
 			while(true) {
+				System.out.println();
 				System.out.println("--- USER테이블 관리 프로그램 ---");
 				System.out.println("1. 회원 전체 조회");
 				System.out.println("2. 회원 추가");
@@ -51,11 +52,12 @@ public class UserView {
 				
 				sc.nextLine();
 				switch(menuNo) {
-				case 1 : 	findAll(); break;
+				case 1 :  findAll(); break;
 				case 2 :  insertUser(); break;
 				case 3 :  deleteId(); break;
 				case 4 :  updatePw(); break;
 				case 5 :  findNo(); break;
+				case 6 :  findId(); break;
 				
 				case 9 : 	System.out.println("프로그램 종료 "); return;
 				default : System.out.println("잘못된 메뉴 선택입니다.");
@@ -183,27 +185,44 @@ public class UserView {
 			
 		}
 		/*
-		 * 넘버로 단일회원조회 ---------------다시하기
+		 * 넘버로 단일회원조회 
 		 */
 		public void findNo() {
 			
 			System.out.println("--- 회원 아이디 검색으로 조회 ---");
 			System.out.print("회원 번호 입력 >");
-			String id = sc.next();
+			int num = sc.nextInt();
 			sc.nextLine();
 			
-			UserDTO search =userController.findNo(id);
+		String	result	= userController.findNo(num);
 			
-			if(search == null) {
-					System.out.println("\n존재하지 않는 번호 입니다.");
+			if(result == null) {
+				System.out.println("조회 결과가 없습니다");
 			} else {
-					System.out.println("\n조회한 회원 아이디" + search.getUserId());
+				System.out.println("조회 결과 : " + result);
 			}
 			
 		}
 		
+		/*
+		 * 회원 아이디로 전체조회
+		 */
+		public void findId() {
+			
+			System.out.println("--- 회원 아이디로 전체 조회 ---");
+			System.out.print("회원 아이디 입력 > " );
+			String num = sc.next();
+			sc.nextLine();
+			
+			UserDTO result = userController.findId(num);
 		
-		
+			
+			if(result == null ){ 
+				System.out.println("조회 결과가 없습니다.");
+			} else {
+				System.out.println("조회 결과 :  " + result);
+			}
+		}
 		
 		
 		

@@ -26,8 +26,8 @@ public class UserDTO {
 	public int getUserNO() {
 		return userNO;
 	}
-	public void setUserNO(int userNO) {
-		this.userNO = userNO;
+	public void setUserNO(int no) {
+		this.userNO = no;
 	}
 	public String getUserId() {
 		return userId;

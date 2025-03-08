@@ -320,31 +320,29 @@ public class UserDAO {
 			/*
 			 * 번호단일조회 -- 번호를 눌렀을때 번호가 있다면 이름을 조회
 			 */
-			public UserDTO findNo(UserDTO search) {
+			public String findNo(UserDTO search) {
 				
 				Connection conn = null;
  				PreparedStatement pstmt =null;
  				ResultSet rset = null;
  				
  				String sql = """
- 						SELECT USER_ID
+ 						SELECT USER_NAME
  						FROM TB_USER
- 						WHERE USER_ID = ?
+ 						WHERE USER_NO = ?
  						""";
- 				
+ 				String result = null;
 				try {
 					conn = DriverManager.getConnection(URL,USERNAME,PASSWORD);
 					pstmt = conn.prepareStatement(sql);
 					
-					pstmt.setString(1, search.getUserId());
-					
-				 rset = pstmt.executeQuery();
+					pstmt.setInt(1, search.getUserNO());
+						
+					rset = pstmt.executeQuery();
 					
 					if(rset.next()) {
-						int no = rset.getInt("USER_NO");
-					} else {
-						search = null;
-					}
+						 result = rset.getString("USER_NAME");
+					} 
 						
 				}catch (SQLException e) {
 					e.printStackTrace();
@@ -358,13 +356,61 @@ public class UserDAO {
 
 				}
 				
-				return search; 
+				return result ; 
 				
 				
 			}
 			
 			
+			public UserDTO findId(UserDTO search) {
+				
+				Connection conn = null;
+				PreparedStatement pstmt = null;
+				ResultSet rset = null;
+				
+				String sql = """
+						SELECT USER_NO,USER_ID,USER_NAME
+						FROM TB_USER
+						WHERE USER_ID = ? 
+						""";
 			
+				
+				UserDTO result = null;
+				
+				try {
+					
+					conn = DriverManager.getConnection(URL,USERNAME,PASSWORD);
+					pstmt = conn.prepareStatement(sql);
+					
+					pstmt.setString(1, search.getUserId());
+					
+					rset = pstmt.executeQuery();
+				
+					
+					if(rset.next()) {
+						 result = new UserDTO();
+						
+						result.setUserId(rset.getString("USER_ID"));
+						result.setUserName(rset.getString("USER_NAME"));
+						result.setUserNO(rset.getInt("USER_NO"));
+					
+					}
+					
+				}catch (SQLException e) {
+					e.printStackTrace();
+				}try {
+					if(rset!=null) rset.close();
+					if(pstmt!=null) pstmt.close();
+					if(conn!=null) conn.close();
+				}catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				
+				return result;
+				
+				
+			}
 			
 			
 			

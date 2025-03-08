@@ -13,3 +13,35 @@ null이 아니다 (= conn이 실제로 연결된 상태라면)
 clsoe()를 호출해서 데이터베이스와의 연결을 끊겠다
 
 3.호출해 -> 메서드실행 -> 글로넘어가
+
+✔ DELETE, UPDATE, INSERT는 영향을 받은 행의 개수를 반환하므로 int로 받아야 함
+✔SELECT USER_NAME처럼 특정 컬럼 값을 조회할 때는 
+ 컬럼의 자료형(String, int, double)을 사용해야 함
+
+👉 Statement는 SQL을 그대로 문자열로 작성하고,
+👉 PreparedStatement는 SQL에 ?를 두고, 입력값을 따로 바인딩해서 실행!
+- Statement가 해킹에 취약한 이유는 
+문자열에서 주석(--), 따옴표('), 세미콜론(;) 같은 특수문자를 제대로 처리하지 못해서 
+공격자가 SQL을 변조할 수 있기 때문이야.
+
+pstmt.executeQuery();를 실행하면 데이터베이스에서 조회된 결과(ResultSet)가 rset에 저장되지만,
+그 데이터를 사용하려면 반드시 rset.next()를 호출해야 해!
+
+rset.net(); => 행이 존재하면 true (특정값설정이아님)
+
+- 점의 의미
+( 필드 접근 : public일때 search.userId =xxx , private일떄 setter,getter사용 ) 2가지가있음
+     -> 변수에 값을 저장하거나 가져오는걸 의미
+UserDTO search = new UserDTO();
+		search.setUserId(num);   -> 값설정(필드접근) : 객체명.setXXX
+		return userDao.findId(search); ->  메서드호출 : 클래스명.메서드명() or 객체명.메서드명()
+
+생성자의 값이 있으면 -> 생성자의 객체 생성시 생성자 값을 객체에 자동실행
+
+필드변수 : 클래스내
+인스턴스변수: 객체내에
+
+
+
+
+

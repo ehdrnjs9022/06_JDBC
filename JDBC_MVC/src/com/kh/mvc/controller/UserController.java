@@ -1,8 +1,6 @@
 package com.kh.mvc.controller;
 
-import java.sql.ResultSet;
 import java.util.List;
-import java.util.Map;
 
 import com.kh.mvc.model.dao.UserDAO;
 import com.kh.mvc.model.dto.UserDTO;
@@ -71,19 +69,29 @@ public class UserController {
 		 * 회원 넘버로 검색으로 조회	
 		 */
 			
-			public UserDTO findNo(String id) {
+			public String findNo(int num) {
 				
 				UserDTO search =new UserDTO();
 				
-				search.setUserId(id);
+				search.setUserNO(num);
 				
 				return userDao.findNo(search);
+			}
+			
+			/*
+		 * 회원 아이디로 조히
+		 */
+		
+			public UserDTO findId(String num) {
+				
+				UserDTO search = new UserDTO();
+				
+				search.setUserId(num);
+				
+				return userDao.findId(search);
 				
 			}
-		
-		
-		
-		
+			
 		
 		
 }
